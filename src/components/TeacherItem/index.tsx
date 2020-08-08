@@ -1,37 +1,63 @@
 import React from 'react';
 import whatssapIcon from '../../assets/images/icons/whatsapp.svg';
 import './style.css';
+import api from '../../services/api';
 
-function TeacherItem() {
+
+export interface Teacher {
+
+    id: number;
+    avatar: string;
+    bio: string;
+    cost: number;
+    name: string;
+    subject: string;
+    whatsapp: string;
+
+
+
+}
+interface TeacherItemProps {
+    teacher: Teacher;
+}
+
+const TeacherItem: React.FC<TeacherItemProps> = ({ teacher }) => {
+
+    function createNewConnection(){
+
+        api.post('connections',{
+            user_id: teacher.id,
+        })
+    }
 
     return (
-    
-    <article className="teacher-item">
-        <header>
-            <img src="https://lh3.googleusercontent.com/ogw/ADGmqu9sJnhrEqKxh4gkNs9AQqeD1Fo831MLu4sw29nM=s83-c-mo" alt="Vinicio Miranda Covalski" />
-            <div>
-                <strong>Vinicio Miranda Covalski</strong>
-                <span>Telecom</span>
 
-            </div>
-        </header>
-        <p> TEXTO DE EXEMPLO
-      <br /><br />
-      TEXTO EXEMPLO TEXTO EXEMPLO TEXTO EXEMPLO
-    </p>
+        <article className="teacher-item">
+            <header>
+                <img src={teacher.avatar} alt={teacher.name} />
+                <div>
+                    <strong>{teacher.name}</strong>
+                    <span>{teacher.subject}</span>
 
-        <footer>
-            <p>Preço/hora
+                </div>
+            </header>
+            <p>{teacher.bio}</p>
 
-            <strong>R$ 50,00</strong>
-            </p>
-            <button type="button">
-                <img src={whatssapIcon} alt="Whatssap" />
-            Entrar em contato
-        </button>
-        </footer>
+            <footer>
+                <p>Preço/hora
 
-    </article>
+            <strong>R$ {teacher.cost}</strong>
+                </p>
+
+
+                <a target="_blank"
+                onClick={createNewConnection}href={`https://wa.me/${teacher.whatsapp}`}>
+                    <img src={whatssapIcon} alt="Whatssap" />
+                         Entrar em contato
+                     </a>
+            </footer>
+
+        </article>
     );
 }
 
